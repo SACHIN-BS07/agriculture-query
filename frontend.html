@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishiSahay - Smart Agricultural Assistant</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f9f4;
+}
+
+header {
+    background: #2e7d32;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background: #1b5e20;
+}
+
+nav button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+nav button:hover {
+    background: #388e3c;
+}
+
+.section {
+    display: none;
+    padding: 20px;
+}
+
+.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button.submit-btn {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button.submit-btn:hover {
+    background: #1b5e20;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌾 KrishiSahay</h1>
+    <p>Generative AI Powered Agricultural Assistant</p>
+</header>
+
+<nav>
+    <button onclick="showSection('chatbot')">🤖 AI Chatbot</button>
+    <button onclick="showSection('weather')">🌦 Weather</button>
+    <button onclick="showSection('market')">📈 Market Price</button>
+    <button onclick="showSection('schemes')">🏛 Government Schemes</button>
+    <button onclick="showSection('disease')">📷 Disease Detection</button>
+</nav>
+
+<!-- AI Chatbot Section -->
+<div id="chatbot" class="section active">
+    <div class="card">
+        <h2>🤖 Ask Agricultural Question</h2>
+
+        <label>Select Language:</label>
+        <select id="language">
+            <option value="english">English</option>
+            <option value="kannada">Kannada</option>
+            <option value="hindi">Hindi</option>
+        </select>
+
+        <textarea id="userQuery" placeholder="Type your farming question..."></textarea>
+        <button class="submit-btn" onclick="sendQuery()">Submit</button>
+
+        <h3>Response:</h3>
+        <div id="chatResponse"></div>
+    </div>
+</div>
+
+<!-- Weather Section -->
+<div id="weather" class="section">
+    <div class="card">
+        <h2>🌦 Real-time Weather</h2>
+        <input type="text" id="location" placeholder="Enter your location">
+        <button class="submit-btn" onclick="getWeather()">Get Weather</button>
+        <div id="weatherResult"></div>
+    </div>
+</div>
+
+<!-- Market Price Section -->
+<div id="market" class="section">
+    <div class="card">
+        <h2>📈 Market Price</h2>
+        <input type="text" id="cropName" placeholder="Enter crop name">
+        <button class="submit-btn" onclick="getMarketPrice()">Check Price</button>
+        <div id="marketResult"></div>
+    </div>
+</div>
+
+<!-- Government Schemes -->
+<div id="schemes" class="section">
+    <div class="card">
+        <h2>🏛 Government Schemes</h2>
+        <select id="schemeCategory">
+            <option>Small Farmers</option>
+            <option>Crop Insurance</option>
+            <option>Subsidy</option>
+        </select>
+        <button class="submit-btn" onclick="getSchemes()">View Schemes</button>
+        <div id="schemeResult"></div>
+    </div>
+</div>
+
+<!-- Disease Detection -->
+<div id="disease" class="section">
+    <div class="card">
+        <h2>📷 Crop Disease Detection (Future Feature)</h2>
+        <input type="file" id="imageUpload">
+        <button class="submit-btn">Upload & Detect</button>
+        <p>⚠ Image-based detection will be integrated using CNN model in future version.</p>
+    </div>
+</div>
+
+<script>
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+}
+
+function sendQuery() {
+    let query = document.getElementById("userQuery").value;
+    document.getElementById("chatResponse").innerHTML =
+        "AI Response will appear here (Backend Integration Required)";
+}
+
+function getWeather() {
+    let location = document.getElementById("location").value;
+    document.getElementById("weatherResult").innerHTML =
+        "Weather data for " + location + " (API Integration Required)";
+}
+
+function getMarketPrice() {
+    let crop = document.getElementById("cropName").value;
+    document.getElementById("marketResult").innerHTML =
+        "Market price for " + crop + " (API Integration Required)";
+}
+
+function getSchemes() {
+    let category = document.getElementById("schemeCategory").value;
+    document.getElementById("schemeResult").innerHTML =
+        "Government schemes for " + category + " (API Integration Required)";
+}
+</script>
+
+</body>
+</html>

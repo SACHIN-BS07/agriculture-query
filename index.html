@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishiSahay - AI Agricultural Decision Intelligence</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:20px;
+}
+
+nav{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+}
+
+nav button{
+    background:none;
+    border:none;
+    color:white;
+    padding:15px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+nav button:hover{
+    background:rgba(255,255,255,0.2);
+}
+
+.section{
+    display:none;
+    padding:20px;
+}
+
+.active{display:block;}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.glass{
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:20px;
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+}
+
+input,select,textarea,button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:10px;
+    border:none;
+}
+
+button{
+    background:#00c9a7;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.result-box{
+    margin-top:10px;
+    background:rgba(0,0,0,0.3);
+    padding:10px;
+    border-radius:10px;
+}
+
+iframe{
+    width:100%;
+    height:250px;
+    border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🌾 KrishiSahay - AI Decision Intelligence Platform</h1>
+</header>
+
+<nav>
+<button onclick="showSection('chatbot')">🤖 Chatbot</button>
+<button onclick="showSection('dashboard')">📊 Dashboard</button>
+<button onclick="showSection('decision')">🧠 Decision Engine</button>
+<button onclick="showSection('schemes')">🏛 Schemes</button>
+<button onclick="showSection('map')">🗺 Shops</button>
+</nav>
+
+<!-- CHATBOT -->
+<div id="chatbot" class="section active">
+<div class="glass">
+<h3>🤖 AI Chatbot</h3>
+<select id="language">
+<option>English</option>
+<option>Hindi</option>
+<option>Kannada</option>
+</select>
+<textarea id="userQuery" placeholder="Ask your farming question..."></textarea>
+<button onclick="sendQuery()">Submit</button>
+<div class="result-box" id="chatResponse"></div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="section">
+<div class="dashboard">
+
+<div class="glass">
+<h3>🌦 Rainfall Forecast</h3>
+<canvas id="rainChart"></canvas>
+</div>
+
+<div class="glass">
+<h3>📈 Market Trend</h3>
+<canvas id="marketChart"></canvas>
+</div>
+
+<div class="glass">
+<h3>🐛 Pest Warning</h3>
+High risk of Fall Armyworm this week.
+</div>
+
+</div>
+</div>
+
+<!-- DECISION ENGINE -->
+<div id="decision" class="section">
+<div class="dashboard">
+
+<div class="glass">
+<h3>🧠 AI Crop Risk Score</h3>
+<input type="number" id="rain" placeholder="Rainfall (mm)">
+<input type="number" id="temp" placeholder="Temperature (°C)">
+<input type="number" id="pest" placeholder="Pest Alert (0-100)">
+<input type="number" id="market" placeholder="Market Fluctuation (%)">
+<button onclick="calculateRisk()">Calculate Risk</button>
+<div class="result-box" id="riskResult"></div>
+</div>
+
+<div class="glass">
+<h3>🌍 District Advisory</h3>
+<select id="district">
+<option>Kolar</option>
+<option>Mysore</option>
+<option>Bangalore Rural</option>
+</select>
+<select id="crop">
+<option>Tomato</option>
+<option>Paddy</option>
+<option>Onion</option>
+</select>
+<button onclick="generateAdvisory()">Generate Advisory</button>
+<div class="result-box" id="advisoryResult"></div>
+</div>
+
+<div class="glass">
+<h3>👨‍🌾 Farmer Personalization</h3>
+<select id="soil">
+<option>Black Soil</option>
+<option>Red Soil</option>
+<option>Sandy Soil</option>
+</select>
+<select id="profileCrop">
+<option>Tomato</option>
+<option>Paddy</option>
+<option>Onion</option>
+</select>
+<input type="number" id="land" placeholder="Land Size (Acres)">
+<button onclick="generatePlan()">Generate Plan</button>
+<div class="result-box" id="planResult"></div>
+</div>
+
+</div>
+</div>
+
+<!-- GOVERNMENT SCHEMES -->
+<div id="schemes" class="section">
+<div class="glass">
+<h3>🏛 Government Schemes</h3>
+<button onclick="window.open('https://www.data.gov.in/apis', '_blank')" style="background:#005f56; color:white; padding:10px; border-radius:10px;">CG and SG schemes</button>
+<button onclick="getSchemes()">Load Schemes</button>
+<div class="result-box" id="schemeResult"></div>
+</div>
+</div>
+
+<!-- MAP -->
+<div id="map" class="section">
+<div class="glass">
+<h3>🗺 Nearby Pesticide Shops</h3>
+<iframe src="https://www.google.com/maps?q=pesticide+shop+near+me&output=embed"></iframe>
+</div>
+</div>
+
+<script>
+
+// Navigation
+function showSection(id){
+document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+// Backend Ready Chatbot
+function sendQuery(){
+let query=document.getElementById("userQuery").value;
+
+fetch("/api/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:query})
+})
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("chatResponse").innerHTML=data.reply;
+})
+.catch(()=>{
+document.getElementById("chatResponse").innerHTML="Backend not connected.";
+});
+}
+
+// Risk Calculation
+function calculateRisk(){
+let rain=parseFloat(document.getElementById("rain").value)||0;
+let temp=parseFloat(document.getElementById("temp").value)||0;
+let pest=parseFloat(document.getElementById("pest").value)||0;
+let market=parseFloat(document.getElementById("market").value)||0;
+
+let risk=(rain*0.2+temp*0.2+pest*0.3+market*0.3);
+let level="Low";
+if(risk>60) level="High";
+else if(risk>40) level="Moderate";
+
+document.getElementById("riskResult").innerHTML=
+`Risk Score: ${risk.toFixed(1)}% (${level})`;
+}
+
+// Advisory
+function generateAdvisory(){
+let district=document.getElementById("district").value;
+let crop=document.getElementById("crop").value;
+
+document.getElementById("advisoryResult").innerHTML=
+`${crop} issues in ${district} during humid conditions suggest fungal infection. Recommended fungicide spray.`;
+}
+
+// Personalization
+function generatePlan(){
+let land=parseFloat(document.getElementById("land").value)||1;
+let fertilizerCost=land*2500;
+let yieldEst=land*18;
+
+document.getElementById("planResult").innerHTML=
+`Estimated Cost: ₹${fertilizerCost}<br>Expected Yield: ${yieldEst} Quintals`;
+}
+
+// Charts
+new Chart(document.getElementById('rainChart'),{
+type:'bar',
+data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+datasets:[{label:'Rainfall (mm)',data:[5,12,8,20,15,10,18]}]}
+});
+
+new Chart(document.getElementById('marketChart'),{
+type:'line',
+data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+datasets:[{label:'Price Trend',data:[20,22,19,25,27,26,30]}]}
+});
+
+</script>
+
+</body>
+</html>
