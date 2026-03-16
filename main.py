@@ -19,7 +19,7 @@ app.add_middleware(
 # ----------------------
 # Groq Client
 # ----------------------
-client = Groq(api_key="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")  # <-- Replace with your Groq API key
+client = Groq(api_key="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")  # <-- Replace with your Groq API key
 
 # ----------------------
 # OpenWeather API
