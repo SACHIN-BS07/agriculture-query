@@ -288,6 +288,14 @@ function calculateRisk(){let risk=(rain.value*0.2+temp.value*0.2+pest.value*0.3+
 function generateAdvisory(){let fd=new FormData();fd.append("district",district.value);fd.append("crop",crop.value);fetch("http://127.0.0.1:8000/api/advisory",{method:"POST",body:fd}).then(r=>r.json()).then(d=>advisoryResult.innerHTML=d.advisory.replace(/\n/g,"<br>"));}
 function generatePlan(){let fd=new FormData();fd.append("soil",soil.value);fd.append("crop",profileCrop.value);fd.append("land",land.value);fetch("http://127.0.0.1:8000/api/personalization",{method:"POST",body:fd}).then(r=>r.json()).then(d=>planResult.innerHTML=d.plan.replace(/\n/g,"<br>"));}
 function searchAmazon(){let product=document.getElementById("pesticideSearch").value.trim();if(!product){alert("Enter pesticide");return;}window.location.href=`https://www.amazon.in/s?k=${encodeURIComponent(product)}`;}
+
+
+ // Example
+fetch("https://ai-kisan-sati.onrender.com/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: userQuery.value, language: language.value })
+});   
 </script>
 
 <footer>&copy; 2026 KrishiSahay AI. All rights reserved. Made with ❤️ for Farmers.</footer>
