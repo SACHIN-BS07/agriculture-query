@@ -29,12 +29,12 @@ def home():
 # ----------------------
 # Groq client
 # ----------------------
-client = Groq(api_key="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")  # Replace with your Groq key
+client = Groq(api_key="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")  # Replace with your Groq key
 
 # ----------------------
 # OpenWeather API
 # ----------------------
-OPENWEATHER_API_KEY = "158e2b02917e280e710858a84fc9982f"  # Replace with your OpenWeather key
+OPENWEATHER_API_KEY = "7b67de86b825746c0fe731f67fe597e3"  # Replace with your OpenWeather key
 
 # ----------------------
 # Health Check
