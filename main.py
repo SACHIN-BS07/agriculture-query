@@ -1,49 +1,47 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import requests
-from groq import Groq  # Make sure "groq" is in requirements.txt
+from groq import Groq
 
 app = FastAPI(title="AI Kisan Sati Backend")
 
 # ----------------------
 # Allow frontend access
 # ----------------------
+# Use "*" to allow any frontend (works on phone, other systems, deployed site)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Can restrict to your frontend domain later
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ----------------------
-# Serve static frontend
+# Serve frontend
 # ----------------------
-#app.mount("/static", StaticFiles(directory="static"), name="static")
-
 @app.get("/")
 def home():
-    # Serves your index.html from the static folder
-    return FileResponse("index.html")
+    # If you host frontend separately, skip this.
+    return FileResponse("index.html")  # Put your index.html here if you want static serving
 
 # ----------------------
-# Groq Client
+# Groq client
 # ----------------------
-client = Groq(api_key="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")  # Replace with your Groq API key
+client = Groq(api_key="YOUR_GROQ_API_KEY")  # Replace with your Groq key
 
 # ----------------------
 # OpenWeather API
 # ----------------------
-OPENWEATHER_API_KEY = "158e2b02917e280e710858a84fc9982f"  # Replace with your OpenWeather API key
+OPENWEATHER_API_KEY = "YOUR_OPENWEATHER_API_KEY"  # Replace with your OpenWeather key
 
 # ----------------------
-# Health check
+# Health Check
 # ----------------------
 @app.get("/api/health")
 def health():
-    return {"message": "AI Kisan Sati Backend Running"}
+    return {"message": "AI Kisan Sati Backend is healthy"}
 
 # ----------------------
 # 1️⃣ AI Chatbot
@@ -59,28 +57,23 @@ async def chat(request: Request):
 
     prompt = f"""
 You are an expert agricultural advisor.
-
 Language: {language}
-
 Farmer Query:
 {user_msg}
-
 Provide a clear, practical, and concise response in {language}.
 """
-
     try:
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="llama-3.1-8b-instant",
             temperature=0.4
         )
-        reply = response.choices[0].message.content
-        return {"reply": reply}
+        return {"reply": response.choices[0].message.content}
     except Exception as e:
         return {"reply": f"Error: {str(e)}"}
 
 # ----------------------
-# 2️⃣ Real-Time Weather
+# 2️⃣ Weather
 # ----------------------
 @app.get("/api/weather")
 def weather(city: str):
@@ -102,7 +95,7 @@ def weather(city: str):
         return {"error": str(e)}
 
 # ----------------------
-# 3️⃣ Image Analysis + Crop Advice
+# 3️⃣ Image Analysis
 # ----------------------
 @app.post("/api/decision")
 async def decision(
@@ -117,21 +110,18 @@ async def decision(
 
     prompt = f"""
 You are an expert agricultural advisor.
-
 Location: {location}
 Crop: {crop}
 Question: {question}
 Image Info: {image_note}
 
 Provide response in structured format:
-
 Cause:
 Treatment:
 Preventive Measures:
 Fertilizer Recommendation:
 Irrigation Advice:
 """
-
     try:
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
@@ -139,69 +129,5 @@ Irrigation Advice:
             temperature=0.4
         )
         return {"analysis": response.choices[0].message.content}
-    except Exception as e:
-        return {"error": str(e)}
-
-# ----------------------
-# 4️⃣ District Advisory
-# ----------------------
-@app.post("/api/advisory")
-async def advisory(
-    district: str = Form(...),
-    crop: str = Form(...)
-):
-    prompt = f"""
-You are an agricultural district advisor.
-
-District: {district}
-Crop: {crop}
-
-Provide:
-- Current seasonal risks
-- Disease alerts
-- Recommended action
-- Suggested pesticide
-"""
-
-    try:
-        response = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            model="llama-3.1-8b-instant",
-            temperature=0.4
-        )
-        return {"advisory": response.choices[0].message.content}
-    except Exception as e:
-        return {"error": str(e)}
-
-# ----------------------
-# 5️⃣ Farmer Personalization
-# ----------------------
-@app.post("/api/personalization")
-async def personalization(
-    soil: str = Form(...),
-    crop: str = Form(...),
-    land: str = Form(...)
-):
-    prompt = f"""
-You are an agricultural planning expert.
-
-Soil Type: {soil}
-Crop: {crop}
-Land Size: {land} acres
-
-Provide:
-- Fertilizer plan
-- Expected yield estimate
-- Irrigation advice
-- Cost estimate overview
-"""
-
-    try:
-        response = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            model="llama-3.1-8b-instant",
-            temperature=0.4
-        )
-        return {"plan": response.choices[0].message.content}
     except Exception as e:
         return {"error": str(e)}
