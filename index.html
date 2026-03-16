@@ -296,6 +296,32 @@ fetch("https://ai-kisan-sati.onrender.com/api/chat", {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ message: userQuery.value, language: language.value })
 });   
+    // Replace with your Render / public backend URL
+const BACKEND_URL = "https://ai-kisan-sati.onrender.com";
+
+async function sendQuery() {
+  const response = await fetch(`${BACKEND_URL}/api/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: userQuery.value, language: language.value })
+  });
+
+  const data = await response.json();
+  chatResponse.innerHTML = data.reply.replace(/\n/g, "<br>");
+}
+
+// Similarly for weather
+async function fetchWeather(city) {
+  const res = await fetch(`${BACKEND_URL}/api/weather?city=${encodeURIComponent(city)}`);
+  const data = await res.json();
+  if (data.error) alert(data.error);
+  else {
+    tempStat.innerText = data.temperature + " °C";
+    humidityStat.innerText = data.humidity + " %";
+    windStat.innerText = data.wind_speed + " m/s";
+    conditionStat.innerText = data.description;
+  }
+}
 </script>
 
 <footer>&copy; 2026 KrishiSahay AI. All rights reserved. Made with ❤️ for Farmers.</footer>
