@@ -21,12 +21,12 @@ app.add_middleware(
 # ----------------------
 # Serve static frontend
 # ----------------------
-app.mount("/static", StaticFiles(directory="static"), name="static")
+#app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def home():
     # Serves your index.html from the static folder
-    return FileResponse("static/index.html")
+    return FileResponse("index.html")
 
 # ----------------------
 # Groq Client
