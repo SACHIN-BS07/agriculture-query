@@ -34,7 +34,7 @@ client = Groq(api_key="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"
 # ----------------------
 # OpenWeather API
 # ----------------------
-OPENWEATHER_API_KEY = "7b67de86b825746c0fe731f67fe597e3"  # Replace with your OpenWeather key
+OPENWEATHER_API_KEY = "bd5e378503939ddaee76f12ad7a97608"  # Replace with your OpenWeather key
 
 # ----------------------
 # Health Check
