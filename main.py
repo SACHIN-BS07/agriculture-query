@@ -1,37 +1,49 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from groq import Groq
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import requests
+from groq import Groq  # Make sure "groq" is in requirements.txt
 
-app = FastAPI()
+app = FastAPI(title="AI Kisan Sati Backend")
 
 # ----------------------
 # Allow frontend access
 # ----------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],  # Can restrict to your frontend domain later
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ----------------------
+# Serve static frontend
+# ----------------------
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def home():
+    # Serves your index.html from the static folder
+    return FileResponse("static/index.html")
+
+# ----------------------
 # Groq Client
 # ----------------------
-client = Groq(api_key="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")  # <-- Replace with your Groq API key
+client = Groq(api_key="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")  # Replace with your Groq API key
 
 # ----------------------
 # OpenWeather API
 # ----------------------
-OPENWEATHER_API_KEY = "158e2b02917e280e710858a84fc9982f"  # <-- Replace with your OpenWeather API key
+OPENWEATHER_API_KEY = "158e2b02917e280e710858a84fc9982f"  # Replace with your OpenWeather API key
 
 # ----------------------
-# Home
+# Health check
 # ----------------------
-@app.get("/")
-def home():
-    return {"message": "KrishiSahay AI Backend Running"}
+@app.get("/api/health")
+def health():
+    return {"message": "AI Kisan Sati Backend Running"}
 
 # ----------------------
 # 1️⃣ AI Chatbot
