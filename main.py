@@ -7,7 +7,7 @@ from groq import Groq
 app = FastAPI(title="AI Kisan Sati Backend")
 
 # ----------------------
-# Allow frontend access
+# Allow frontend accesS
 # ----------------------
 # Use "*" to allow any frontend (works on phone, other systems, deployed site)
 app.add_middleware(
